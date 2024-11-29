@@ -183,7 +183,7 @@ const Form = () => {
                   borderRadius="5px"
                   p="1rem"
                 >
-                    //uncomment it later
+                    //remove comments  later
                   {/* <Dropzone
                     acceptedFiles=".jpg,.jpeg,.png"
                     multiple={false}
