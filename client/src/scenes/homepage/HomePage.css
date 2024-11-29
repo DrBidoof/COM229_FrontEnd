@@ -1,0 +1,31 @@
+/* HomePage.css */
+
+.navbar-container{
+    width: 100%;
+    padding: 2rem 6%;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.widget-container {
+    flex: 1;
+    max-width: 26%;
+}
+
+.main_content {
+    flex: 1;
+    max-width: 42%;
+    margin-top: 2rem;
+}
+
+@media (min-width: 1000px) {
+    .main-content{
+        margin-top: 0;
+    }
+}
+
+.advert-container {
+    margin: 2rem 0;
+}
