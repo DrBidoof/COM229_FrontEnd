@@ -37,21 +37,27 @@ const Form = () => {
   };
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
-    const loggedIn = await loggedInResponse.json();
-    onSubmitProps.resetForm();
-    if (loggedIn) {
-      dispatch(
-        setLogin({
-          user: loggedIn.user,
-          token: loggedIn.token,
-        })
-      );
-      navigate("/home");
+    try {
+      const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      
+      if (!loggedInResponse.ok) {
+        throw new Error("Login failed");
+      }
+  
+      const loggedIn = await loggedInResponse.json();
+      onSubmitProps.resetForm();
+  
+      if (loggedIn) {
+        dispatch(setLogin({ user: loggedIn.user, token: loggedIn.token }));
+        navigate("/home");
+      }
+    } catch (error) {
+      console.error(error);
+      // Optionally set an error state to show a message to the user
     }
   };
 
