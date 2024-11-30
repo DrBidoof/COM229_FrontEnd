@@ -4,10 +4,9 @@ import {useSelector} from "react-redux";
 import Navbar from "scenes/navbar"
 import UserWidget from "scenes/widgets/UserWidget";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
-import PostWidget from "scenes/widgets/PostWidget";
+import PostsWidget from "scenes/widgets/PostsWidget"
 import AdvertWidget from "scenes/widgets/AdvertWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
-import "./HomePage.css";
 
 const HomePage = () => {
     const isNonMobileScreens = window.matchMedia("(min-width: 1000px)").matches;
@@ -21,7 +20,7 @@ const HomePage = () => {
                 </div>
                     <div className="main-content">
                         <MyPostWidget picturePath={picturePath} />
-                        <PostWidget userId={_id}/>
+                        <PostsWidget userId={_id}/>
                     </div>
                     {isNonMobileScreens && (
                         <div className="widget-container">
