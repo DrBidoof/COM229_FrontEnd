@@ -1,0 +1,45 @@
+/* ProfilePage.css */
+.profile-container {
+    width: 100%;
+    padding: 2rem 6%;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+  }
+  
+  .profile-container.block {
+    display: block;
+  }
+  
+  .widget-container {
+    flex-basis: 26%;
+  }
+  
+  .main-content {
+    flex-basis: 42%;
+  }
+  
+  .main-content.block {
+    margin-top: 2rem;
+  }
+  
+  .spacer {
+    margin: 2rem 0;
+  }
+  
+  /* Add styles for different screen sizes */
+  @media (min-width: 1000px) {
+    .profile-container {
+      display: flex;
+    }
+    .profile-container.block {
+      display: block;
+    }
+    .widget-container {
+      flex-basis: 26%;
+    }
+    .main-content {
+      flex-basis: 42%;
+    }
+  }
+  
