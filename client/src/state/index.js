@@ -1,6 +1,5 @@
 //file for redux and toolkit
 import { createSlice } from "@reduxjs/toolkit";
-import { act } from "react";
 
 //state stored in global, accessible throughout the application
 const initialState = {
