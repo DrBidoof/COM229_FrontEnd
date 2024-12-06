@@ -2,7 +2,16 @@ import React from "react";
 import Form from "./Form";
 
 const LoginPage = () => {
-  const isNonMobileScreens = window.innerWidth >= 1000;
+  const [isNonMobileScreens, setIsNonMobileScreens] = React.useState(window.innerWidth >= 1000);
+
+React.useEffect(() => {
+  const handleResize = () => {
+    setIsNonMobileScreens(window.innerWidth >= 1000);
+  };
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
 
   return (
     <div style={{ width: "100%", padding: "1rem 6%", textAlign: "center", backgroundColor: "#f0f0f0" }}>

@@ -1,5 +1,5 @@
 //will have react components for navigation bar
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
@@ -9,9 +9,17 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
-    const isNonMobileScreens = window.innerWidth >= 1000;
-
     const fullName = `${user.firstName} ${user.lastName}`;
+    const [isNonMobileScreens, setIsNonMobileScreens] = useState(window.innerWidth >= 1000);
+
+    useEffect(() => {
+      const handleResize = () => {
+        setIsNonMobileScreens(window.innerWidth >= 1000);
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
     return (
         <div style={styles.flexBetween}>
           <div style={styles.navContent}>
@@ -43,14 +51,18 @@ const Navbar = () => {
           <span style={styles.icon}>🔔</span>
           <span style={styles.icon}>❓</span>
           <div style={styles.formControl}>
-            <select
-              style={styles.select}
-              value={fullName}
-              onChange={() => {}}
-            >
-              <option value={fullName}>{fullName}</option>
-              <option onClick={() => dispatch(setLogout())}>Log Out</option>
-            </select>
+          <select
+  style={styles.select}
+  onChange={(e) => {
+    if (e.target.value === "logout") {
+      dispatch(setLogout());
+    }
+  }}
+>
+  <option value="fullName">{fullName}</option>
+  <option value="logout">Log Out</option>
+</select>
+
           </div>
         </div>
       ) : (

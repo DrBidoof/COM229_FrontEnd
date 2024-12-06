@@ -9,7 +9,18 @@ import AdvertWidget from "scenes/widgets/AdvertWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
 
 const HomePage = () => {
-    const isNonMobileScreens = window.matchMedia("(min-width: 1000px)").matches;
+    const [isNonMobileScreens, setIsNonMobileScreens] = React.useState(
+        window.matchMedia("(min-width: 1000px)").matches
+      );
+      
+      React.useEffect(() => {
+        const handleResize = () => {
+          setIsNonMobileScreens(window.matchMedia("(min-width: 1000px)").matches);
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+      }, []);
+      
     const {_id, picturePath} = useSelector((state) => state.user);
     return (
         <div>

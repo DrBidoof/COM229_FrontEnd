@@ -61,10 +61,12 @@ const Form = () => {
     }
   };
 
-  const handleFormSubmit = async (values, onSubmitProps) => {
+  const handleFormSubmit = async (event, values, onSubmitProps) => {
+    event.preventDefault();
     if (isLogin) await login(values, onSubmitProps);
     if (isRegister) await register(values, onSubmitProps);
   };
+  
 
   const formStyle = {
     width: "100%",

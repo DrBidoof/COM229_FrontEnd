@@ -12,7 +12,18 @@ const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const { userId } = useParams();
   const token = useSelector((state) => state.token);
-  const isNonMobileScreens = window.matchMedia("(min-width:1000px)").matches;
+  const [isNonMobileScreens, setIsNonMobileScreens] = useState(
+    window.matchMedia("(min-width: 1000px)").matches
+  );
+  
+  useEffect(() => {
+    const handleResize = () => {
+      setIsNonMobileScreens(window.matchMedia("(min-width: 1000px)").matches);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  
 
   const getUser = async () => {
     const response = await fetch(`http://localhost:3001/users/${userId}`, {
@@ -27,7 +38,8 @@ const ProfilePage = () => {
     getUser();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!user) return null;
+  if (!user) return <div>Loading...</div>;
+
 
   return (
     <div>
