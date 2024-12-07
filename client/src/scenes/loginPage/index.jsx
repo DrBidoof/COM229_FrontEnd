@@ -32,7 +32,6 @@ React.useEffect(() => {
       >
         <h2 style={{ fontWeight: 500, fontSize: "1.5rem", marginBottom: "1.5rem" }}>
         Every Moment Deserves to be Shared
-
         </h2>
         <Form />
       </div>
