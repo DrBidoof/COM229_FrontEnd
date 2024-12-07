@@ -19,7 +19,7 @@ const UserImage = ({ image, size = "60px" }) => {
       <img
         style={imageStyle}
         alt="user"
-        src={`http://localhost:3000/assets/${image}`} 
+        src={`http://localhost:6001/assets/${image}`} 
       />
     </div>
   );
