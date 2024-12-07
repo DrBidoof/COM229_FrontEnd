@@ -30,35 +30,46 @@ const Form = () => {
 
   const register = async (values, onSubmitProps) => {
     try {
-      const formData = new FormData();
-      for (let key in values) {
-        formData.append(key, values[key]);
-      }
-      if (selectedFile) {
-        formData.append("picturePath", selectedFile);
-      }
+        const formData = new FormData();
+        for (let key in values) {
+            formData.append(key, values[key]);
+        }
+        if (selectedFile) {
+            formData.append("picturePath", selectedFile);
+        }
 
-      console.log("Register request data:", formData);
+        console.log("Register request data:", formData);
 
-      const savedUserResponse = await fetch("http://localhost:6001/auth/register", {
-        method: "POST",
-        body: formData,
-      });
+        const savedUserResponse = await fetch("http://localhost:6001/auth/register", {
+            method: "POST",
+            body: formData,
+        });
 
-      const savedUser = await savedUserResponse.json();
-      console.log("Register response:", savedUser);
+        const savedUser = await savedUserResponse.json();
+        console.log("Register response:", savedUser);
 
-      onSubmitProps.resetForm();
+        onSubmitProps.resetForm();
 
-      if (savedUser) {
-        setPageType("login");
-        alert("Registration successful! Please log in.");
-      }
+        if (savedUser) {
+            // Clear form values and switch to login
+            setFormValues({
+                firstName: "",
+                lastName: "",
+                location: "",
+                occupation: "",
+                email: "",
+                password: "",
+            });
+            setSelectedFile(null);
+            setPageType("login");
+            alert("Registration successful! Please log in.");
+        }
     } catch (error) {
-      console.error("Error during registration:", error);
-      alert("Registration failed. Please try again.");
+        console.error("Error during registration:", error);
+        alert("Registration failed. Please try again.");
     }
-  };
+};
+
 
   const login = async (values, onSubmitProps) => {
     try {
