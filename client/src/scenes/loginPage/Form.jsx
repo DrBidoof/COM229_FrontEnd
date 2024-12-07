@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setLogin } from "state"; // Assuming your Redux state management
+import { setLogin } from "state"; 
 import Dropzone from "react-dropzone";
 
 const Form = () => {
