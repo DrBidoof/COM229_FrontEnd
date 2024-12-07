@@ -6,9 +6,9 @@ import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import AdvertWidget from "scenes/widgets/AdvertWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
+import "./HomePage.css"; 
 
 const HomePage = () => {
-  // Responsive screen check
   const [isNonMobileScreens, setIsNonMobileScreens] = React.useState(
     window.matchMedia("(min-width: 1000px)").matches
   );
@@ -21,34 +21,34 @@ const HomePage = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Redux state selectors
-  const user = useSelector((state) => state.auth.user); // Update path as per state structure
+  const user = useSelector((state) => state.auth.user); 
   const token = useSelector((state) => state.auth.token);
 
-  console.log("Token:", token);
-
-  // Handle loading state
   if (!user) {
-    return <div>Loading...</div>; // A placeholder until user data is available
+    return <div>Loading...</div>;
   }
 
   const { _id, picturePath } = user;
 
   return (
-    <div>
+    <div className="homepage">
       <Navbar />
-      <div className="navbar-container">
-        <div className="widget-container">
+      <div className="homepage-container">
+        {/* Left Sidebar */}
+        <div className="sidebar">
           <UserWidget userId={_id} picturePath={picturePath} />
+          <AdvertWidget />
         </div>
+
+        {/* Main Content */}
         <div className="main-content">
           <MyPostWidget picturePath={picturePath} />
           <PostsWidget userId={_id} />
         </div>
+
+        {/* Right Sidebar */}
         {isNonMobileScreens && (
-          <div className="widget-container">
-            <AdvertWidget />
-            <div className="advert-container" />
+          <div className="sidebar">
             <FriendListWidget userId={_id} />
           </div>
         )}
