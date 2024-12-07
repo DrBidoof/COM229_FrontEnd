@@ -62,37 +62,40 @@ const Form = () => {
 
   const login = async (values, onSubmitProps) => {
     try {
-      console.log("Login request data:", values);
+        console.log("Login request data:", values);
 
-      const loggedInResponse = await fetch("http://localhost:6001/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
+        const loggedInResponse = await fetch("http://localhost:6001/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(values),
+        });
 
-      console.log("LoggedInResponse:", loggedInResponse);
+        console.log("LoggedInResponse status:", loggedInResponse.status);
 
-      if (!loggedInResponse.ok) {
-        console.error("Login failed with status:", loggedInResponse.status);
-        throw new Error("Login failed");
-      }
+        if (!loggedInResponse.ok) {
+            console.error("Login failed with status:", loggedInResponse.status);
+            throw new Error("Login failed");
+        }
 
-      const loggedIn = await loggedInResponse.json();
-      console.log("Login response JSON:", loggedIn);
+        const loggedIn = await loggedInResponse.json();
+        console.log("Login response JSON:", loggedIn);
 
-      onSubmitProps.resetForm();
+        onSubmitProps.resetForm();
 
-      if (loggedIn) {
-        dispatch(setLogin({ user: loggedIn.user, token: loggedIn.token }));
-        console.log("Dispatched setLogin action:", loggedIn);
-        navigate("/home");
-        console.log("Navigated to /home");
-      }
+        if (loggedIn) {
+            dispatch(setLogin({ user: loggedIn.user, token: loggedIn.token }));
+            console.log("Redux state after login dispatch:", {
+                user: loggedIn.user,
+                token: loggedIn.token,
+            });
+            navigate("/home");
+        }
     } catch (error) {
-      console.error("Error during login:", error.message);
-      alert("Invalid login credentials. Please try again.");
+        console.error("Error during login:", error.message);
+        alert("Invalid login credentials. Please try again.");
     }
-  };
+};
+
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
