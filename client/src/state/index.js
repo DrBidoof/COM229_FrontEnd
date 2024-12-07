@@ -1,5 +1,5 @@
 //file for redux and toolkit
-import { createSlice } from "@reduxjs/toolkit";
+import {configureStore, createSlice } from "@reduxjs/toolkit";
 
 //state stored in global, accessible throughout the application
 const initialState = {
@@ -20,7 +20,7 @@ export const authSlice = createSlice({
         setLogin: (state, action) => {
             //logging in 
             state.user = action.payload.user;
-            state.token -= action.payload.token;
+            state.token = action.payload.token;
         },
         setLogout: (state) => {
             //when logged out
@@ -53,4 +53,8 @@ export const authSlice = createSlice({
 })
 
 export const{ setMode, setLogin, setLogout, setFriends, setPosts, setPost } = authSlice.actions;
+const store = configureStore({
+    reducer: authSlice.reducer, // Use the auth slice reducer
+  });
 export default authSlice.reducer;
+export {store};

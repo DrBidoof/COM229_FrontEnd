@@ -5,10 +5,12 @@ import ProfilePage from "scenes/profilePage";
 import { useSelector } from "react-redux";
 
 function App() {
-  const mode = useSelector((state) => state.mode); // Get the current mode (e.g., "light" or "dark")
-  const isAuth = Boolean(useSelector((state) => state.token)); // Check if the user is authenticated
+  const mode = useSelector((state) => state.auth.mode); // Access the mode from auth slice
+  const token = useSelector((state) => state.auth.token); // Access the token from auth slice
+  const isAuth = Boolean(token); // Check if the user is authenticated
 
-  // Define styles for light and dark modes
+  console.log("Redux state:", { mode, token, isAuth }); // Debug Redux state
+
   const appStyles = {
     app: {
       textAlign: "center",
@@ -19,22 +21,6 @@ function App() {
       padding: 0,
       fontFamily: "Arial, sans-serif",
     },
-    page: {
-      padding: "20px",
-      fontSize: "18px",
-    },
-    button: {
-      padding: "10px 20px",
-      margin: "10px",
-      border: "none",
-      backgroundColor: "#007bff",
-      color: "#fff",
-      fontSize: "16px",
-      cursor: "pointer",
-    },
-    buttonHover: {
-      backgroundColor: "#0056b3",
-    },
   };
 
   return (
@@ -44,11 +30,11 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           <Route
             path="/home"
-            element={isAuth ? <HomePage style={appStyles.page} /> : <Navigate to="/" />}
+            element={isAuth ? <HomePage /> : <Navigate to="/" />}
           />
           <Route
             path="/profile/:userId"
-            element={isAuth ? <ProfilePage style={appStyles.page} /> : <Navigate to="/" />}
+            element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
           />
         </Routes>
       </BrowserRouter>

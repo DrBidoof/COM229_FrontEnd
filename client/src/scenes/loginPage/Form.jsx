@@ -1,73 +1,112 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setLogin } from "state";
+import { setLogin } from "state"; // Assuming your Redux state management
 import Dropzone from "react-dropzone";
 
 const Form = () => {
-  const [pageType, setPageType] = useState("login");
+  const [pageType, setPageType] = useState("login"); // Toggle between "login" and "register"
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
+
+  const [formValues, setFormValues] = useState({
+    firstName: "",
+    lastName: "",
+    location: "",
+    occupation: "",
+    email: "",
+    password: "",
+  });
+
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const register = async (values, onSubmitProps) => {
-    const formData = new FormData();
-    for (let value in values) {
-      formData.append(value, values[value]);
-    }
-    if (selectedFile) {
-      formData.append("picturePath", selectedFile);
-    }
+  // Handle input changes for the form
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
 
-    const savedUserResponse = await fetch(
-      "http://localhost:3001/auth/register",
-      {
+  const register = async (values, onSubmitProps) => {
+    try {
+      const formData = new FormData();
+      for (let key in values) {
+        formData.append(key, values[key]);
+      }
+      if (selectedFile) {
+        formData.append("picturePath", selectedFile);
+      }
+
+      console.log("Register request data:", formData);
+
+      const savedUserResponse = await fetch("http://localhost:6001/auth/register", {
         method: "POST",
         body: formData,
-      }
-    );
-    const savedUser = await savedUserResponse.json();
-    onSubmitProps.resetForm();
+      });
 
-    if (savedUser) {
-      setPageType("login");
+      const savedUser = await savedUserResponse.json();
+      console.log("Register response:", savedUser);
+
+      onSubmitProps.resetForm();
+
+      if (savedUser) {
+        setPageType("login");
+        alert("Registration successful! Please log in.");
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      alert("Registration failed. Please try again.");
     }
   };
 
   const login = async (values, onSubmitProps) => {
     try {
-      const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
+      console.log("Login request data:", values);
+
+      const loggedInResponse = await fetch("http://localhost:6001/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
-      
+
+      console.log("LoggedInResponse:", loggedInResponse);
+
       if (!loggedInResponse.ok) {
+        console.error("Login failed with status:", loggedInResponse.status);
         throw new Error("Login failed");
       }
-  
+
       const loggedIn = await loggedInResponse.json();
+      console.log("Login response JSON:", loggedIn);
+
       onSubmitProps.resetForm();
-  
+
       if (loggedIn) {
         dispatch(setLogin({ user: loggedIn.user, token: loggedIn.token }));
+        console.log("Dispatched setLogin action:", loggedIn);
         navigate("/home");
+        console.log("Navigated to /home");
       }
     } catch (error) {
-      console.error(error);
-      // Optionally set an error state to show a message to the user
+      console.error("Error during login:", error.message);
+      alert("Invalid login credentials. Please try again.");
     }
   };
 
-  const handleFormSubmit = async (event, values, onSubmitProps) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    if (isLogin) await login(values, onSubmitProps);
-    if (isRegister) await register(values, onSubmitProps);
-  };
-  
 
+    if (isLogin) {
+      await login(formValues, { resetForm: () => setFormValues({ ...formValues, password: "" }) });
+    }
+
+    if (isRegister) {
+      await register(formValues, { resetForm: () => setFormValues({}) });
+    }
+  };
+
+  // Styles
   const formStyle = {
     width: "100%",
     maxWidth: "500px",
@@ -147,6 +186,8 @@ const Form = () => {
                 name="firstName"
                 placeholder="First Name"
                 style={inputStyle}
+                value={formValues.firstName}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -160,6 +201,8 @@ const Form = () => {
                 name="lastName"
                 placeholder="Last Name"
                 style={inputStyle}
+                value={formValues.lastName}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -173,6 +216,8 @@ const Form = () => {
                 name="location"
                 placeholder="Location"
                 style={inputStyle}
+                value={formValues.location}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -186,11 +231,12 @@ const Form = () => {
                 name="occupation"
                 placeholder="Occupation"
                 style={inputStyle}
+                value={formValues.occupation}
+                onChange={handleInputChange}
                 required
               />
             </div>
 
-            {/* File Input Box */}
             <div style={inputGroupStyle}>
               <label htmlFor="picture" style={labelStyle}>
                 Picture
@@ -232,6 +278,8 @@ const Form = () => {
             name="email"
             placeholder="Email"
             style={inputStyle}
+            value={formValues.email}
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -246,16 +294,16 @@ const Form = () => {
             name="password"
             placeholder="Password"
             style={inputStyle}
+            value={formValues.password}
+            onChange={handleInputChange}
             required
           />
         </div>
 
-        {/* Submit Button */}
         <button type="submit" style={buttonStyle}>
           {isLogin ? "Login" : "Register"}
         </button>
 
-        {/* Toggle Link */}
         <div style={toggleLinkStyle}>
           {isLogin ? (
             <>

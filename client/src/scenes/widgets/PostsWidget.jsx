@@ -1,12 +1,12 @@
-// PostsWidget.js
 import React from "react";
 
 const PostsWidget = ({ userId }) => {
   return (
     <div>
-      <h2>Posts for User {userId}</h2>
+      <p>PostsWidget Placeholder</p>
+      <p>User ID: {userId}</p>
     </div>
   );
 };
 
-export default PostsWidget; // Ensure this export exists
+export default PostsWidget;

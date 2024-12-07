@@ -1,68 +1,70 @@
-//will have react components for navigation bar
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-    const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const user = useSelector((state) => state.user);
-    const fullName = `${user.firstName} ${user.lastName}`;
-    const [isNonMobileScreens, setIsNonMobileScreens] = useState(window.innerWidth >= 1000);
+  const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-      const handleResize = () => {
-        setIsNonMobileScreens(window.innerWidth >= 1000);
-      };
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
+  // Select `user` and `token` from state
+  const user = useSelector((state) => state.auth.user);
+  const fullName = user ? `${user.firstName} ${user.lastName}` : "Guest";
 
-    return (
-        <div style={styles.flexBetween}>
-          <div style={styles.navContent}>
-            <h1
-              style={styles.logo}
-              onClick={() => navigate("/home")}
-            >
-              Sociopedia
-            </h1>
-            {isNonMobileScreens && (
-              <div style={styles.searchContainer}>
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  style={styles.inputBase}
-                />
-                <button style={styles.iconButton}>🔍</button>
-              </div>
-            )}
+  // Responsive check for mobile screens
+  const [isNonMobileScreens, setIsNonMobileScreens] = useState(
+    window.innerWidth >= 1000
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsNonMobileScreens(window.innerWidth >= 1000);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <div style={styles.flexBetween}>
+      <div style={styles.navContent}>
+        <h1 style={styles.logo} onClick={() => navigate("/home")}>
+          Sociopedia
+        </h1>
+        {isNonMobileScreens && (
+          <div style={styles.searchContainer}>
+            <input
+              type="text"
+              placeholder="Search..."
+              style={styles.inputBase}
+            />
+            <button style={styles.iconButton}>🔍</button>
           </div>
-    
-          {/* DESKTOP NAV */}
-          {isNonMobileScreens ? (
-            <div style={styles.desktopNav}>
-              <button onClick={() => dispatch(setMode())} style={styles.iconButton}>
-                {document.body.classList.contains("dark") ? "Dark Mode" : "Light Mode"}
-                </button>
+        )}
+      </div>
+
+      {/* Desktop Navigation */}
+      {isNonMobileScreens ? (
+        <div style={styles.desktopNav}>
+          <button onClick={() => dispatch(setMode())} style={styles.iconButton}>
+            {document.body.classList.contains("dark") ? "Dark Mode" : "Light Mode"}
+          </button>
           <span style={styles.icon}>💬</span>
           <span style={styles.icon}>🔔</span>
           <span style={styles.icon}>❓</span>
           <div style={styles.formControl}>
-          <select
-  style={styles.select}
-  onChange={(e) => {
-    if (e.target.value === "logout") {
-      dispatch(setLogout());
-    }
-  }}
->
-  <option value="fullName">{fullName}</option>
-  <option value="logout">Log Out</option>
-</select>
-
+            <select
+              style={styles.select}
+              onChange={(e) => {
+                if (e.target.value === "logout") {
+                  dispatch(setLogout());
+                  navigate("/");
+                }
+              }}
+            >
+              <option value="fullName">{fullName}</option>
+              <option value="logout">Log Out</option>
+            </select>
           </div>
         </div>
       ) : (
@@ -74,7 +76,7 @@ const Navbar = () => {
         </button>
       )}
 
-      {/* MOBILE NAV */}
+      {/* Mobile Navigation */}
       {!isNonMobileScreens && isMobileMenuToggled && (
         <div style={styles.mobileNav}>
           <div style={styles.closeButtonContainer}>
@@ -97,9 +99,17 @@ const Navbar = () => {
             <span style={styles.icon}>🔔</span>
             <span style={styles.icon}>❓</span>
             <div style={styles.formControl}>
-              <select style={styles.select} value={fullName} onChange={() => {}}>
-                <option value={fullName}>{fullName}</option>
-                <option onClick={() => dispatch(setLogout())}>Log Out</option>
+              <select
+                style={styles.select}
+                onChange={(e) => {
+                  if (e.target.value === "logout") {
+                    dispatch(setLogout());
+                    navigate("/");
+                  }
+                }}
+              >
+                <option value="fullName">{fullName}</option>
+                <option value="logout">Log Out</option>
               </select>
             </div>
           </div>
@@ -114,7 +124,7 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     padding: "1rem 6%",
-    backgroundColor: "#f0f0f0", 
+    backgroundColor: "#f0f0f0",
   },
   navContent: {
     display: "flex",
@@ -182,6 +192,6 @@ const styles = {
     alignItems: "center",
     gap: "3rem",
   },
+};
 
-}
 export default Navbar;
