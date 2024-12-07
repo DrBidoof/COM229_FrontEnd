@@ -6,52 +6,29 @@ import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import AdvertWidget from "scenes/widgets/AdvertWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
-import "./HomePage.css"; 
+import "./HomePage.css"
 
 const HomePage = () => {
-  const [isNonMobileScreens, setIsNonMobileScreens] = React.useState(
-    window.matchMedia("(min-width: 1000px)").matches
-  );
+  const user = useSelector((state) => state.auth.user);
+  const { _id, picturePath } = user || {};
 
-  React.useEffect(() => {
-    const handleResize = () => {
-      setIsNonMobileScreens(window.matchMedia("(min-width: 1000px)").matches);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const user = useSelector((state) => state.auth.user); 
-  const token = useSelector((state) => state.auth.token);
-
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
-  const { _id, picturePath } = user;
+  if (!user) return <div>Loading...</div>;
 
   return (
-    <div className="homepage">
+    <div>
       <Navbar />
-      <div className="homepage-container">
-        {/* Left Sidebar */}
-        <div className="sidebar">
+      <div className="homepage">
+        <div className="widget">
           <UserWidget userId={_id} picturePath={picturePath} />
-          <AdvertWidget />
         </div>
-
-        {/* Main Content */}
         <div className="main-content">
           <MyPostWidget picturePath={picturePath} />
           <PostsWidget userId={_id} />
         </div>
-
-        {/* Right Sidebar */}
-        {isNonMobileScreens && (
-          <div className="sidebar">
-            <FriendListWidget userId={_id} />
-          </div>
-        )}
+        <div className="widget">
+          <AdvertWidget />
+          <FriendListWidget userId={_id} />
+        </div>
       </div>
     </div>
   );

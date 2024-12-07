@@ -2,196 +2,54 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
+import "./navbar.css"
 
 const Navbar = () => {
-  const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // Select `user` and `token` from state
+  const mode = useSelector((state) => state.auth.mode);
   const user = useSelector((state) => state.auth.user);
   const fullName = user ? `${user.firstName} ${user.lastName}` : "Guest";
 
-  // Responsive check for mobile screens
-  const [isNonMobileScreens, setIsNonMobileScreens] = useState(
-    window.innerWidth >= 1000
-  );
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsNonMobileScreens(window.innerWidth >= 1000);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   return (
-    <div style={styles.flexBetween}>
-      <div style={styles.navContent}>
-        <h1 style={styles.logo} onClick={() => navigate("/home")}>
-        Snapzy
+    <div className="navbar">
+      <div className="navbar-left">
+        <h1 className="navbar-logo" onClick={() => navigate("/home")}>
+          Snapzy
         </h1>
-        {isNonMobileScreens && (
-          <div style={styles.searchContainer}>
-            <input
-              type="text"
-              placeholder="Search..."
-              style={styles.inputBase}
-            />
-            <button style={styles.iconButton}>🔍</button>
-          </div>
-        )}
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="search-input"
+          />
+          <button className="search-button">🔍</button>
+        </div>
       </div>
 
-      {/* Desktop Navigation */}
-      {isNonMobileScreens ? (
-        <div style={styles.desktopNav}>
-          <button onClick={() => dispatch(setMode())} style={styles.iconButton}>
-            {document.body.classList.contains("dark") ? "Dark Mode" : "Light Mode"}
-          </button>
-          <span style={styles.icon}>💬</span>
-          <span style={styles.icon}>🔔</span>
-          <span style={styles.icon}>❓</span>
-          <div style={styles.formControl}>
-            <select
-              style={styles.select}
-              onChange={(e) => {
-                if (e.target.value === "logout") {
-                  dispatch(setLogout());
-                  navigate("/");
-                }
-              }}
-            >
-              <option value="fullName">{fullName}</option>
-              <option value="logout">Log Out</option>
-            </select>
-          </div>
-        </div>
-      ) : (
-        <button
-          onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-          style={styles.iconButton}
-        >
-          ☰
+      <div className="navbar-right">
+        <button onClick={() => dispatch(setMode())} className="theme-toggle">
+          {mode === "dark" ? "Light Mode" : "Dark Mode"}
         </button>
-      )}
-
-      {/* Mobile Navigation */}
-      {!isNonMobileScreens && isMobileMenuToggled && (
-        <div style={styles.mobileNav}>
-          <div style={styles.closeButtonContainer}>
-            <button
-              onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-              style={styles.iconButton}
-            >
-              ❌
-            </button>
-          </div>
-
-          <div style={styles.menuItems}>
-            <button
-              onClick={() => dispatch(setMode())}
-              style={styles.iconButton}
-            >
-              {document.body.classList.contains("dark") ? "Dark Mode" : "Light Mode"}
-            </button>
-            <span style={styles.icon}>💬</span>
-            <span style={styles.icon}>🔔</span>
-            <span style={styles.icon}>❓</span>
-            <div style={styles.formControl}>
-              <select
-                style={styles.select}
-                onChange={(e) => {
-                  if (e.target.value === "logout") {
-                    dispatch(setLogout());
-                    navigate("/");
-                  }
-                }}
-              >
-                <option value="fullName">{fullName}</option>
-                <option value="logout">Log Out</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      )}
+        <span className="icon">💬</span>
+        <span className="icon">🔔</span>
+        <span className="icon">❓</span>
+        <select
+          className="navbar-select"
+          onChange={(e) => {
+            if (e.target.value === "logout") {
+              dispatch(setLogout());
+              navigate("/");
+            }
+          }}
+        >
+          <option value="fullName">{fullName}</option>
+          <option value="logout">Log Out</option>
+        </select>
+      </div>
     </div>
   );
 };
 
-const styles = {
-  flexBetween: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "1rem 6%",
-    backgroundColor: "#f0f0f0",
-  },
-  navContent: {
-    display: "flex",
-    gap: "1.75rem",
-  },
-  logo: {
-    fontWeight: "bold",
-    fontSize: "2rem",
-    color: "#1976d2",
-    cursor: "pointer",
-  },
-  searchContainer: {
-    display: "flex",
-    backgroundColor: "#e0e0e0",
-    borderRadius: "9px",
-    padding: "0.1rem 1.5rem",
-  },
-  inputBase: {
-    border: "none",
-    outline: "none",
-    background: "none",
-  },
-  iconButton: {
-    border: "none",
-    background: "none",
-    cursor: "pointer",
-  },
-  desktopNav: {
-    display: "flex",
-    gap: "2rem",
-  },
-  icon: {
-    fontSize: "25px",
-  },
-  formControl: {
-    backgroundColor: "#e0e0e0",
-    borderRadius: "0.25rem",
-    padding: "0.25rem 1rem",
-  },
-  select: {
-    border: "none",
-    outline: "none",
-    background: "none",
-    width: "150px",
-  },
-  mobileNav: {
-    position: "fixed",
-    right: "0",
-    bottom: "0",
-    height: "100%",
-    zIndex: 10,
-    maxWidth: "500px",
-    minWidth: "300px",
-    backgroundColor: "#fff",
-  },
-  closeButtonContainer: {
-    display: "flex",
-    justifyContent: "flex-end",
-    padding: "1rem",
-  },
-  menuItems: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "3rem",
-  },
-};
-
 export default Navbar;
+
