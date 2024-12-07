@@ -29,7 +29,7 @@ const Navbar = () => {
     <div style={styles.flexBetween}>
       <div style={styles.navContent}>
         <h1 style={styles.logo} onClick={() => navigate("/home")}>
-          Sociopedia
+        Snapzy
         </h1>
         {isNonMobileScreens && (
           <div style={styles.searchContainer}>
