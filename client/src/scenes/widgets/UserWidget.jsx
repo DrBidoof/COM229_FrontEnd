@@ -23,8 +23,12 @@ const UserWidget = ({ userId, picturePath }) => {
   }, [userId, token]); // Memoize dependencies
 
   useEffect(() => {
+    if (!userId) {
+      console.error("UserWidget received undefined userId. Skipping fetch.");
+      return;
+    }
     getUser();
-  }, [getUser]); // Use the memoized function as a dependency
+  }, [getUser, userId]); // Use the memoized function as a dependency
 
   if (!user) {
     return null; // Render nothing until user data is available

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "scenes/navbar";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
@@ -10,33 +10,42 @@ import './ProfilePage.css';
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
-  const { userId } = useParams();
-  const token = useSelector((state) => state.token);
+  const { userId } = useParams(); // Get userId from URL
+  const token = useSelector((state) => state.token); // Get token from Redux state
+  const navigate = useNavigate(); // Initialize navigate
   const [isNonMobileScreens, setIsNonMobileScreens] = useState(
     window.matchMedia("(min-width: 1000px)").matches
   );
 
-  // Fetch user details
   const getUser = async () => {
     try {
+      console.log("Fetching user data with userId:", userId);
+      console.log("Using token:", token);
+
+      if (!token) {
+        console.error("Missing token. Redirecting to login.");
+        navigate("/"); // Redirect to login if token is missing
+        return;
+      }
+
       const response = await fetch(`http://localhost:6001/users/${userId}`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch user data");
+        throw new Error(`Failed to fetch user data: ${response.status}`);
       }
 
       const data = await response.json();
+      console.log("Fetched user data:", data);
       setUser(data);
     } catch (err) {
-      console.error("Error fetching user:", err.message);
-      setUser(null); // Handle error case
+      console.error("Error fetching user data:", err.message);
+      setUser(null); // Handle error gracefully
     }
   };
 
-  // Handle responsive layout
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 1000px)");
     const handleMediaChange = (e) => setIsNonMobileScreens(e.matches);
