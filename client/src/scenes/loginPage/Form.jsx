@@ -40,7 +40,7 @@ const Form = () => {
 
         console.log("Register request data:", formData);
 
-        const savedUserResponse = await fetch("${BACKEND_URL}/auth/register", {
+        const savedUserResponse = await fetch("http://localhost:6001/auth/register", {
             method: "POST",
             body: formData,
         });
