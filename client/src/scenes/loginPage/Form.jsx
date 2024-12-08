@@ -71,41 +71,49 @@ const Form = () => {
 };
 
 
-  const login = async (values, onSubmitProps) => {
-    try {
-        console.log("Login request data:", values);
+const login = async (values, onSubmitProps) => {
+  try {
+    const loginPayload = {
+      email: values.email,
+      password: values.password,
+    };
+    console.log("Login request data:", loginPayload);
 
-        const loggedInResponse = await fetch("https://group-project-com229-backend-l17m.onrender.com/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(values),
-        });        
+    const loggedInResponse = await fetch(
+      "https://group-project-com229-backend-l17m.onrender.com/auth/login",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginPayload),
+      }
+    );
 
-        console.log("LoggedInResponse status:", loggedInResponse.status);
+    console.log("LoggedInResponse status:", loggedInResponse.status);
 
-        if (!loggedInResponse.ok) {
-            console.error("Login failed with status:", loggedInResponse.status);
-            throw new Error("Login failed");
-        }
-
-        const loggedIn = await loggedInResponse.json();
-        console.log("Login response JSON:", loggedIn);
-
-        onSubmitProps.resetForm();
-
-        if (loggedIn) {
-            dispatch(setLogin({ user: loggedIn.user, token: loggedIn.token }));
-            console.log("Redux state after login dispatch:", {
-                user: loggedIn.user,
-                token: loggedIn.token,
-            });
-            navigate("/home");
-        }
-    } catch (error) {
-        console.error("Error during login:", error.message);
-        alert("Invalid login credentials. Please try again.");
+    if (!loggedInResponse.ok) {
+      console.error("Login failed with status:", loggedInResponse.status);
+      throw new Error("Login failed");
     }
+
+    const loggedIn = await loggedInResponse.json();
+    console.log("Login response JSON:", loggedIn);
+
+    onSubmitProps.resetForm();
+
+    if (loggedIn) {
+      dispatch(setLogin({ user: loggedIn.user, token: loggedIn.token }));
+      console.log("Redux state after login dispatch:", {
+        user: loggedIn.user,
+        token: loggedIn.token,
+      });
+      navigate("/home");
+    }
+  } catch (error) {
+    console.error("Error during login:", error.message);
+    alert("Invalid login credentials. Please try again.");
+  }
 };
+
 
 
   const handleFormSubmit = async (event) => {
