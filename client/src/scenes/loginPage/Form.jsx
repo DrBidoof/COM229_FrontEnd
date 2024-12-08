@@ -76,10 +76,10 @@ const Form = () => {
         console.log("Login request data:", values);
 
         const loggedInResponse = await fetch("https://group-project-com229-backend-l17m.onrender.com/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(values),
-        });
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values),
+        });        
 
         console.log("LoggedInResponse status:", loggedInResponse.status);
 
