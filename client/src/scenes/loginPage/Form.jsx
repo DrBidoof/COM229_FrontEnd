@@ -40,10 +40,10 @@ const Form = () => {
 
         console.log("Register request data:", formData);
 
-        const savedUserResponse = await fetch("https://group-project-com229-backend-l17m.onrender.com/auth/register", {
-            method: "POST",
-            body: formData,
-        });
+        const savedUserResponse = await fetch(`${process.env.REACT_APP_API_URL}/auth/register`, {
+          method: "POST",
+          body: formData,
+      });
 
         const savedUser = await savedUserResponse.json();
         console.log("Register response:", savedUser);
@@ -80,7 +80,7 @@ const login = async (values, onSubmitProps) => {
     console.log("Login request data:", loginPayload);
 
     const loggedInResponse = await fetch(
-      "https://group-project-com229-backend-l17m.onrender.com/auth/login",
+      `${process.env.REACT_APP_API_URL}/auth/login`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

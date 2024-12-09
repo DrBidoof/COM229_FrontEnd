@@ -9,7 +9,7 @@ const PostsWidget = ({ userId }) => {
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch("https://group-project-com229-backend-l17m.onrender.com/posts", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/posts`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

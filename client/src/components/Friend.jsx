@@ -15,7 +15,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
 
   const patchFriend = async () => {
     const response = await fetch(
-      `https://group-project-com229-backend-l17m.onrender.com/users/${_id}/${friendId}`,
+      `${process.env.REACT_APP_API_URL}/users/${_id}/${friendId}`,
       {
         method: "PATCH",
         headers: {

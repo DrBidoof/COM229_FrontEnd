@@ -9,7 +9,7 @@ const FriendListWidget = ({ userId }) => {
   const fetchFriends = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`https://group-project-com229-backend-l17m.onrender.com/users/${userId}/friends`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${userId}/friends`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

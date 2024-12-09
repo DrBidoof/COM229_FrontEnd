@@ -27,7 +27,7 @@ const ProfilePage = () => {
       }
 
       const response = await fetch(
-        `https://group-project-com229-backend-l17m.onrender.com/users/${userId}`,
+        `${process.env.REACT_APP_API_URL}/users/${userId}`,
         {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },

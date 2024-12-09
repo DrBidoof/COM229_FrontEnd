@@ -25,7 +25,7 @@ const MyPostWidget = ({ picturePath }) => {
     }
 
     try {
-      const response = await fetch("https://group-project-com229-backend-l17m.onrender.com/posts", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/posts`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
