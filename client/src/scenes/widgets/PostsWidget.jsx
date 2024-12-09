@@ -9,23 +9,29 @@ const PostsWidget = ({ userId }) => {
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:6001/posts", {
+      const response = await fetch("https://group-project-com229-backend-l17m.onrender.com/posts", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch posts");
+      }
+
       const data = await response.json();
-      setPosts(data.allPosts);
+      console.log("Fetched posts:", data);
+      setPosts(data.allPosts || []);
     } catch (error) {
       console.error("Error fetching posts:", error);
     } finally {
       setLoading(false);
     }
-  }, [token]); // Memoize the function based on the token
+  }, [token]);
 
   const handleLike = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:6001/posts/${postId}/like`, {
+      const response = await fetch(`https://group-project-com229-backend-l17m.onrender.com/posts/${postId}/like`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -34,23 +40,23 @@ const PostsWidget = ({ userId }) => {
         body: JSON.stringify({ userId }),
       });
 
-      if (response.ok) {
-        setPosts((prevPosts) =>
-          prevPosts.map((post) =>
-            post._id === postId
-              ? {
-                  ...post,
-                  likes: {
-                    ...post.likes,
-                    [userId]: !post.likes[userId],
-                  },
-                }
-              : post
-          )
-        );
-      } else {
-        console.error("Failed to like post");
+      if (!response.ok) {
+        throw new Error("Failed to like post");
       }
+
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post._id === postId
+            ? {
+                ...post,
+                likes: {
+                  ...post.likes,
+                  [userId]: !post.likes[userId],
+                },
+              }
+            : post
+        )
+      );
     } catch (error) {
       console.error("Error liking post:", error);
     }
@@ -58,7 +64,7 @@ const PostsWidget = ({ userId }) => {
 
   useEffect(() => {
     fetchPosts();
-  }, [fetchPosts]); // Include fetchPosts as a dependency
+  }, [fetchPosts]);
 
   if (loading) return <p>Loading posts...</p>;
 
@@ -84,7 +90,7 @@ const PostsWidget = ({ userId }) => {
             <p>{post.description}</p>
             {post.picturePath && (
               <img
-                src={`http://localhost:6001/assets/${post.picturePath}`}
+                src={`https://group-project-com229-backend-l17m.onrender.com/assets/${post.picturePath}`}
                 alt="Post"
                 style={{ width: "100%", height: "auto", borderRadius: "5px" }}
               />

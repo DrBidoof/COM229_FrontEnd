@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "scenes/navbar";
@@ -11,9 +11,13 @@ import './ProfilePage.css';
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const { userId } = useParams();
-  const token = useSelector((state) => state.token);
+  const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
+  const [isNonMobileScreens, setIsNonMobileScreens] = useState(
+    window.matchMedia("(min-width: 1000px)").matches
+  );
 
+  // Fetch user data
   const getUser = async () => {
     try {
       if (!token) {
@@ -22,10 +26,13 @@ const ProfilePage = () => {
         return;
       }
 
-      const response = await fetch(`https://group-project-com229-backend-l17m.onrender.com/users/${userId}`, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(
+        `https://group-project-com229-backend-l17m.onrender.com/users/${userId}`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Failed to fetch user data: ${response.status}`);
@@ -39,9 +46,18 @@ const ProfilePage = () => {
     }
   };
 
+  // Handle screen size changes for responsiveness
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1000px)");
+    const handleMediaChange = (e) => setIsNonMobileScreens(e.matches);
+
+    mediaQuery.addEventListener("change", handleMediaChange);
+    return () => mediaQuery.removeEventListener("change", handleMediaChange);
+  }, []);
+
   useEffect(() => {
     getUser();
-  }, [userId, token]);
+  }, [userId, token]); // Refetch when userId or token changes
 
   if (!user) {
     return (
@@ -55,15 +71,15 @@ const ProfilePage = () => {
   return (
     <div>
       <Navbar />
-      <div className={`profile-container ${isNonMobileScreens ? 'flex' : 'block'}`}>
+      <div className={`profile-container ${isNonMobileScreens ? "flex" : "block"}`}>
         <div className="widget-container">
-          {user.picturePath && (
+          {user && (
             <UserWidget user={user} />
           )}
           <div className="spacer" />
           <FriendListWidget userId={userId} />
         </div>
-        <div className={`main-content ${isNonMobileScreens ? 'flex' : 'block'}`}>
+        <div className={`main-content ${isNonMobileScreens ? "flex" : "block"}`}>
           <MyPostWidget picturePath={user.picturePath} />
           <div className="spacer" />
           <PostsWidget userId={userId} isProfile />

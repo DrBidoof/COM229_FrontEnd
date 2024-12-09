@@ -11,6 +11,13 @@ const MyPostWidget = ({ picturePath }) => {
     e.preventDefault();
     setLoading(true);
 
+    // Form validation
+    if (!description.trim()) {
+      alert("Post description cannot be empty.");
+      setLoading(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("description", description);
     if (picture) {
@@ -18,7 +25,7 @@ const MyPostWidget = ({ picturePath }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:6001/posts", {
+      const response = await fetch("https://group-project-com229-backend-l17m.onrender.com/posts", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -31,7 +38,8 @@ const MyPostWidget = ({ picturePath }) => {
         setDescription("");
         setPicture(null);
       } else {
-        alert("Failed to create post");
+        const errorData = await response.json();
+        alert(`Failed to create post: ${errorData.message || "Unknown error"}`);
       }
     } catch (error) {
       console.error("Error creating post:", error);
@@ -42,7 +50,7 @@ const MyPostWidget = ({ picturePath }) => {
   };
 
   return (
-    <form onSubmit={handlePostSubmit}>
+    <form onSubmit={handlePostSubmit} style={{ marginBottom: "20px" }}>
       <h2>Create a Post</h2>
       <textarea
         placeholder="What's on your mind?"
@@ -54,6 +62,9 @@ const MyPostWidget = ({ picturePath }) => {
           height: "100px",
           marginBottom: "10px",
           padding: "10px",
+          fontSize: "16px",
+          border: "1px solid #ccc",
+          borderRadius: "5px",
         }}
         disabled={loading}
       />
@@ -61,7 +72,12 @@ const MyPostWidget = ({ picturePath }) => {
         type="file"
         accept="image/*"
         onChange={(e) => setPicture(e.target.files[0])}
-        style={{ marginBottom: "10px" }}
+        style={{
+          marginBottom: "10px",
+          padding: "5px",
+          border: "1px solid #ccc",
+          borderRadius: "5px",
+        }}
         disabled={loading}
       />
       <button
