@@ -10,21 +10,15 @@ import './ProfilePage.css';
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
-  const { userId } = useParams(); // Get userId from URL
-  const token = useSelector((state) => state.token); // Get token from Redux state
-  const navigate = useNavigate(); // Initialize navigate
-  const [isNonMobileScreens, setIsNonMobileScreens] = useState(
-    window.matchMedia("(min-width: 1000px)").matches
-  );
+  const { userId } = useParams();
+  const token = useSelector((state) => state.token);
+  const navigate = useNavigate();
 
   const getUser = async () => {
     try {
-      console.log("Fetching user data with userId:", userId);
-      console.log("Using token:", token);
-
       if (!token) {
         console.error("Missing token. Redirecting to login.");
-        navigate("/"); // Redirect to login if token is missing
+        navigate("/");
         return;
       }
 
@@ -38,25 +32,16 @@ const ProfilePage = () => {
       }
 
       const data = await response.json();
-      console.log("Fetched user data:", data);
       setUser(data);
     } catch (err) {
       console.error("Error fetching user data:", err.message);
-      setUser(null); // Handle error gracefully
+      setUser(null);
     }
   };
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(min-width: 1000px)");
-    const handleMediaChange = (e) => setIsNonMobileScreens(e.matches);
-
-    mediaQuery.addEventListener("change", handleMediaChange);
-    return () => mediaQuery.removeEventListener("change", handleMediaChange);
-  }, []);
-
-  useEffect(() => {
     getUser();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [userId, token]);
 
   if (!user) {
     return (
@@ -73,7 +58,7 @@ const ProfilePage = () => {
       <div className={`profile-container ${isNonMobileScreens ? 'flex' : 'block'}`}>
         <div className="widget-container">
           {user.picturePath && (
-            <UserWidget userId={userId} picturePath={user.picturePath} />
+            <UserWidget user={user} />
           )}
           <div className="spacer" />
           <FriendListWidget userId={userId} />
