@@ -31,7 +31,7 @@ const PostsWidget = ({ userId }) => {
 
   const handleLike = async (postId) => {
     try {
-      const response = await fetch(`https://group-project-com229-backend-l17m.onrender.com/posts/${postId}/like`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/posts/${postId}/like`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,

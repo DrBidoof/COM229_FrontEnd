@@ -1,16 +1,47 @@
+import { useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "./userWidget.css";
 
-const UserWidget = ({ user }) => {
-  const { firstName, lastName, location, occupation, viewedProfile, impressions, friends } = user;
+const UserWidget = ({ userId, picturePath }) => {
+  const [user, setUser] = useState(null);
+  const token = useSelector((state) => state.token);
   const navigate = useNavigate();
+
+  // Memoize the getUser function
+  const getUser = useCallback(async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${userId}`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      setUser(data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  }, [userId, token]); // Memoize dependencies
+
+  useEffect(() => {
+    if (!userId) {
+      console.error("UserWidget received undefined userId. Skipping fetch.");
+      return;
+    }
+    getUser();
+  }, [getUser, userId]); // Use the memoized function as a dependency
+
+  if (!user) {
+    return null; // Render nothing until user data is available
+  }
+
+  const { firstName, lastName, location, occupation, viewedProfile, impressions, friends } = user;
 
   return (
     <div className="widget">
       {/* First Row */}
-      <div className="user-header" onClick={() => navigate(`/profile/${user.id}`)}>
+      <div className="user-header" onClick={() => navigate(`/profile/${userId}`)}>
         <div className="user-info">
-          <img src={user.picturePath} alt="user profile" className="user-image" />
+          <img src={picturePath} alt="user profile" className="user-image" />
           <div>
             <h4 className="user-name">{firstName} {lastName}</h4>
             <p className="user-friends">{friends?.length || 0} friends</p>
@@ -76,6 +107,5 @@ const UserWidget = ({ user }) => {
     </div>
   );
 };
-
 
 export default UserWidget;
