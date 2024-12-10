@@ -34,9 +34,9 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-right">
-        <button onClick={() => dispatch(setMode())} className="theme-toggle">
-          {mode === "dark" ? "Light Mode" : "Dark Mode"}
-        </button>
+      <button onClick={() => dispatch(setMode())} className="theme-toggle">
+  {mode === "dark" ? "☀️" : "🌙"}
+</button>
         <span className="icon">💬</span>
         <span className="icon">🔔</span>
         <span className="icon">❓</span>
