@@ -1,71 +1,65 @@
-/* ProfilePage.css */
+/* Container for profile page */
 .profile-container {
-    width: 100%;
-    padding: 2rem 6%;
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+/* Widget container */
+.widget-container {
+  flex: 1;
+  max-width: 300px;
+}
+
+/* Main content area */
+.main-content {
+  flex: 2;
+  max-width: 700px;
+}
+
+/* Flex and block utility classes */
+.flex {
+  display: flex;
+}
+.block {
+  display: block;
+}
+
+/* Spacer for spacing between widgets */
+.spacer {
+  margin-bottom: 20px;
+}
+
+/* Loading container styles */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 18px;
+  color: #555;
+}
+
+/* Spinner for loading state */
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #ddd;
+  border-top: 5px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  
-  .profile-container.block {
-    display: block;
+  100% {
+    transform: rotate(360deg);
   }
-  
-  .widget-container {
-    flex-basis: 26%;
-  }
-  
-  .main-content {
-    flex-basis: 42%;
-  }
-  
-  .main-content.block {
-    margin-top: 2rem;
-  }
-  
-  .spacer {
-    margin: 2rem 0;
-  }
-  
-  /* Add styles for different screen sizes */
-  @media (min-width: 1000px) {
-    .profile-container {
-      display: flex;
-    }
-    .profile-container.block {
-      display: block;
-    }
-    .widget-container {
-      flex-basis: 26%;
-    }
-    .main-content {
-      flex-basis: 42%;
-    }
-  }
-  .loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
-  
-  .spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    border-top: 4px solid #000;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-  
+}

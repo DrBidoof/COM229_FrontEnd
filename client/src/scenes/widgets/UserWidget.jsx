@@ -1,49 +1,70 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "./userWidget.css";
 
 const UserWidget = ({ userId, picturePath }) => {
-  const [user, setUser] = useState(null);
-  const token = useSelector((state) => state.token);
+  const [user, setUser] = useState(null); // State to store user data
+  const token = useSelector((state) => state.auth.token); // Get the token from Redux state
   const navigate = useNavigate();
 
-  // Memoize the getUser function
+  // Function to fetch user data
   const getUser = useCallback(async () => {
     try {
+      console.log(`Fetching user data for userId: ${userId}`);
       const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${userId}`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      if (!response.ok) {
+        console.error(`Error: Received status ${response.status}`);
+        const errorData = await response.json();
+        console.error("Error details:", errorData);
+        return;
+      }
+
       const data = await response.json();
-      setUser(data);
+      console.log("User data received:", data);
+      setUser(data); // Store user data in state
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
-  }, [userId, token]); // Memoize dependencies
+  }, [userId, token]);
 
+  // Fetch user data when component mounts
   useEffect(() => {
     if (!userId) {
       console.error("UserWidget received undefined userId. Skipping fetch.");
       return;
     }
     getUser();
-  }, [getUser, userId]); // Use the memoized function as a dependency
+  }, [getUser, userId]);
 
   if (!user) {
-    return null; // Render nothing until user data is available
+    return <p>Loading...</p>; // Render a loading message until data is fetched
   }
 
-  const { firstName, lastName, location, occupation, viewedProfile, impressions, friends } = user;
+  // Destructure user properties
+  const { firstName, lastName, location, occupation, friends } = user;
 
   return (
     <div className="widget">
-      {/* First Row */}
-      <div className="user-header" onClick={() => navigate(`/profile/${userId}`)}>
+      {/* User Header */}
+      <div
+        className="user-header"
+        onClick={() => navigate(`/profile/${userId}`)} // Navigate to profile page on click
+      >
         <div className="user-info">
-          <img src={picturePath} alt="user profile" className="user-image" />
+          <img
+            src={picturePath || "https://via.placeholder.com/50"}
+            alt="User profile"
+            className="user-image"
+          />
           <div>
-            <h4 className="user-name">{firstName} {lastName}</h4>
+            <h4 className="user-name">
+              {firstName} {lastName}
+            </h4>
             <p className="user-friends">{friends?.length || 0} friends</p>
           </div>
         </div>
@@ -52,7 +73,7 @@ const UserWidget = ({ userId, picturePath }) => {
 
       <hr />
 
-      {/* Second Row */}
+      {/* User Details */}
       <div className="user-details">
         <div className="user-location">
           <span className="icon">📍</span>
@@ -61,47 +82,6 @@ const UserWidget = ({ userId, picturePath }) => {
         <div className="user-occupation">
           <span className="icon">💼</span>
           <p>{occupation || "Occupation not provided"}</p>
-        </div>
-      </div>
-
-      <hr />
-
-      {/* Third Row */}
-      <div className="user-stats">
-        <div className="user-stat">
-          <p>Who's viewed your profile</p>
-          <p className="stat-value">{viewedProfile || 0}</p>
-        </div>
-        <div className="user-stat">
-          <p>Impressions of your post</p>
-          <p className="stat-value">{impressions || 0}</p>
-        </div>
-      </div>
-
-      <hr />
-
-      {/* Fourth Row */}
-      <div className="user-social">
-        <h5>Social Profiles</h5>
-        <div className="social-profile">
-          <div className="social-info">
-            <img src="../assets/twitter.png" alt="Twitter" className="social-image" />
-            <div>
-              <p className="social-name">Twitter</p>
-              <p className="social-type">Social Network</p>
-            </div>
-          </div>
-          <button className="edit-social">Edit</button>
-        </div>
-        <div className="social-profile">
-          <div className="social-info">
-            <img src="../assets/linkedin.png" alt="LinkedIn" className="social-image" />
-            <div>
-              <p className="social-name">LinkedIn</p>
-              <p className="social-type">Network Platform</p>
-            </div>
-          </div>
-          <button className="edit-social">Edit</button>
         </div>
       </div>
     </div>

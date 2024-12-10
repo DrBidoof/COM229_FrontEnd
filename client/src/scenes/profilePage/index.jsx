@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "scenes/navbar";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
-import UserWidget from "scenes/widgets/UserWidget";
-import './ProfilePage.css';
+import "./ProfilePage.css";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -17,8 +16,8 @@ const ProfilePage = () => {
     window.matchMedia("(min-width: 1000px)").matches
   );
 
-  // Fetch user data
-  const getUser = async () => {
+  // Fetch user data with useCallback
+  const getUser = useCallback(async () => {
     try {
       if (!token) {
         console.error("Missing token. Redirecting to login.");
@@ -44,7 +43,7 @@ const ProfilePage = () => {
       console.error("Error fetching user data:", err.message);
       setUser(null);
     }
-  };
+  }, [userId, token, navigate]); // Include necessary dependencies
 
   // Handle screen size changes for responsiveness
   useEffect(() => {
@@ -56,8 +55,8 @@ const ProfilePage = () => {
   }, []);
 
   useEffect(() => {
-    getUser();
-  }, [userId, token]); // Refetch when userId or token changes
+    getUser(); // Safe to include getUser here now
+  }, [getUser]);
 
   if (!user) {
     return (
@@ -73,16 +72,13 @@ const ProfilePage = () => {
       <Navbar />
       <div className={`profile-container ${isNonMobileScreens ? "flex" : "block"}`}>
         <div className="widget-container">
-          {user && (
-            <UserWidget user={user} />
-          )}
-          <div className="spacer" />
+          <div className="spacer"></div>
           <FriendListWidget userId={userId} />
         </div>
-        <div className={`main-content ${isNonMobileScreens ? "flex" : "block"}`}>
+        <div className="main-content">
           <MyPostWidget picturePath={user.picturePath} />
-          <div className="spacer" />
-          <PostsWidget userId={userId} isProfile />
+          <div className="spacer"></div>
+          <PostsWidget userId={userId} />
         </div>
       </div>
     </div>
