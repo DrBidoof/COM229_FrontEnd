@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
+import "./PostsWidget.css";
 
-const PostsWidget = ({ userId }) => {
+const PostsWidget = ({ userId, fetchFriends }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = useSelector((state) => state.auth.token);
@@ -63,21 +64,29 @@ const PostsWidget = ({ userId }) => {
 
   const handleAddFriend = async (friendId) => {
     try {
-      const response = await fetch(`http://localhost:6001/friends/${friendId}/add`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/users/${userId}/${friendId}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to add friend");
       }
 
       alert("Friend added successfully!");
+      
+      // Update friends list in FriendListWidget
+      if (fetchFriends) {
+        fetchFriends(); // Trigger fetchFriends to update FriendListWidget
+      }
     } catch (error) {
       console.error("Error adding friend:", error);
-      alert("An error occurred while adding the friend.");
+      alert("Failed to add friend. Please try again.");
     }
   };
 
@@ -88,62 +97,44 @@ const PostsWidget = ({ userId }) => {
   if (loading) return <p>Loading posts...</p>;
 
   return (
-    <div>
-      <h2>Posts</h2>
+    <div className="posts-container">
       {posts.length === 0 ? (
         <p>No posts available.</p>
       ) : (
         posts.map((post) => (
-          <div
-            key={post._id}
-            style={{
-              border: "1px solid #ccc",
-              margin: "10px",
-              padding: "10px",
-              borderRadius: "5px",
-            }}
-          >
-            <h3>
-              {post.firstName} {post.lastName}
-            </h3>
-            <p>{post.description}</p>
+          <div className="post-card" key={post._id}>
+            <div className="post-header">
+              <img
+                src="https://via.placeholder.com/50" // Replace with user profile picture if available
+                alt="Profile"
+                className="profile-picture"
+              />
+              <div>
+                <h3 className="post-author">{post.firstName} {post.lastName}</h3>
+                <p className="post-location">Location: {post.location || "Unknown"}</p>
+              </div>
+            </div>
+            <p className="post-description">{post.description}</p>
             {post.picturePath && (
               <img
                 src={`http://localhost:6001${post.picturePath}`}
                 alt="Post"
-                style={{ width: "100%", height: "auto", borderRadius: "5px" }}
+                className="post-image"
               />
             )}
-            {post.userID !== userId && (
+            <div className="post-actions">
+              {post.userID !== userId && (
+                <button className="add-friend-btn" onClick={() => handleAddFriend(post.userID)}>
+                  Add Friend
+                </button>
+              )}
               <button
-                onClick={() => handleAddFriend(post.userID)}
-                style={{
-                  padding: "5px 10px",
-                  backgroundColor: "#6c757d",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                  marginTop: "10px",
-                }}
+                className={`like-btn ${post.likes[userId] ? "liked" : ""}`}
+                onClick={() => handleLike(post._id)}
               >
-                Add Friend
+                {post.likes[userId] ? "Unlike" : "Like"} ({Object.keys(post.likes || {}).length})
               </button>
-            )}
-            <button
-              onClick={() => handleLike(post._id)}
-              style={{
-                padding: "5px 10px",
-                backgroundColor: post.likes[userId] ? "#28a745" : "#007bff",
-                color: "#fff",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                marginTop: "10px",
-              }}
-            >
-              {post.likes[userId] ? "Unlike" : "Like"} ({Object.keys(post.likes || {}).length})
-            </button>
+            </div>
           </div>
         ))
       )}

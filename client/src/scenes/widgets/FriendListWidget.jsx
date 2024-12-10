@@ -92,7 +92,7 @@ const FriendListWidget = ({ userId }) => {
               <img
                 src="/assets/icon-removefriend.webp" // Path to your icon in the public/assets folder
                 alt="Remove Friend"
-              />
+               />
             </button>
           </div>          
           ))}

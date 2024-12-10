@@ -35,8 +35,9 @@ const Form = () => {
             formData.append(key, values[key]);
         }
         if (selectedFile) {
-            formData.append("picturePath", selectedFile);
+          formData.append("picture", selectedFile); // Must match "picture" in multer
         }
+        
 
         console.log("Register request data:", formData);
 
