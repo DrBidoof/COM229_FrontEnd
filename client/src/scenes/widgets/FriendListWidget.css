@@ -1,0 +1,112 @@
+/* Main container */
+.friend-widget {
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background-color: #fdfdfd;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .friend-widget:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Widget title */
+  .widget-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Friend list container */
+  .friend-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  
+  /* Friend card */
+  .friend-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .friend-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* Friend information */
+  .friend-info {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    margin-right: 20px;
+  }
+  
+  .friend-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+  }
+  
+  .friend-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .friend-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .friend-subtitle {
+    font-size: 14px;
+    color: #888;
+    margin: 0;
+  }
+  
+  /* Remove button */
+  .friend-remove-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .friend-remove-btn:hover {
+    background-color: #ffe6e6; /* Subtle red hover effect */
+  }
+  
+  .friend-remove-btn img {
+    width: 20px; /* Adjust width */
+    height: 20px; /* Adjust height */
+    object-fit: contain;
+  }
+  
+  

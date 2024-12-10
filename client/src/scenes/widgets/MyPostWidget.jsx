@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-const MyPostWidget = ({ picturePath }) => {
+const MyPostWidget = ({ onPostCreated }) => {
   const [description, setDescription] = useState("");
   const [picture, setPicture] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const token = useSelector((state) => state.auth.token);
+  const userId = useSelector((state) => state.auth.user._id);
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    // Form validation
     if (!description.trim()) {
       alert("Post description cannot be empty.");
       setLoading(false);
@@ -19,6 +20,7 @@ const MyPostWidget = ({ picturePath }) => {
     }
 
     const formData = new FormData();
+    formData.append("userID", userId);
     formData.append("description", description);
     if (picture) {
       formData.append("picture", picture);
@@ -33,13 +35,15 @@ const MyPostWidget = ({ picturePath }) => {
         body: formData,
       });
 
+      const responseData = await response.json();
+
       if (response.ok) {
         alert("Post created successfully!");
         setDescription("");
         setPicture(null);
+        if (onPostCreated) onPostCreated(); // Trigger post list refresh
       } else {
-        const errorData = await response.json();
-        alert(`Failed to create post: ${errorData.message || "Unknown error"}`);
+        alert(`Failed to create post: ${responseData.message || "Unknown error"}`);
       }
     } catch (error) {
       console.error("Error creating post:", error);

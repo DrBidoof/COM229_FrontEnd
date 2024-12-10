@@ -20,7 +20,6 @@ const PostsWidget = ({ userId }) => {
       }
 
       const data = await response.json();
-      console.log("Fetched posts:", data);
       setPosts(data.allPosts || []);
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -90,7 +89,7 @@ const PostsWidget = ({ userId }) => {
             <p>{post.description}</p>
             {post.picturePath && (
               <img
-                src={`https://group-project-com229-backend-l17m.onrender.com/assets/${post.picturePath}`}
+                src={`${process.env.REACT_APP_API_URL}/assets/${post.picturePath}`}
                 alt="Post"
                 style={{ width: "100%", height: "auto", borderRadius: "5px" }}
               />

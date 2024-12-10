@@ -5,13 +5,27 @@ import UserWidget from "scenes/widgets/UserWidget";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
-import "./HomePage.css"
+import "./HomePage.css";
 
 const HomePage = () => {
   const user = useSelector((state) => state.auth.user);
-  const { _id, picturePath } = user || {};
+  const token = useSelector((state) => state.auth.token);
 
-  if (!user) return <div>Loading...</div>;
+  console.log("Redux State - User:", user);
+  console.log("Redux State - Token:", token);
+
+  if (!user) {
+    return (
+      <div>
+        <Navbar />
+        <p>Loading user data...</p>
+      </div>
+    );
+  }
+
+  // Map `id` to `_id` for consistency
+  const { id, picturePath } = user;
+  const _id = id;
 
   return (
     <div>
