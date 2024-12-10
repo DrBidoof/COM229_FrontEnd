@@ -14,6 +14,12 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="navbar-left">
+        
+      <img
+          src="/assets/AppLogo.png"
+          alt="Logo"
+          style={{ width: "100px", height: "100px" }}
+        />
         <h1 className="navbar-logo" onClick={() => navigate("/home")}>
           Snapzy
         </h1>

@@ -105,7 +105,7 @@ const PostsWidget = ({ userId, fetchFriends }) => {
           <div className="post-card" key={post._id}>
             <div className="post-header">
               <img
-                src="https://via.placeholder.com/50" // Replace with user profile picture if available
+                src={ "/assets/Image.png" }// Replace with user profile picture if available
                 alt="Profile"
                 className="profile-picture"
               />

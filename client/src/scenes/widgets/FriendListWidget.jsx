@@ -75,7 +75,7 @@ const FriendListWidget = ({ userId }) => {
             <div className="friend-card" key={friend._id}>
             <div className="friend-info">
               <img
-                src={friend.picturePath || "https://via.placeholder.com/50"}
+                src={friend.picturePath || "/assets/Image.png"}
                 alt={`${friend.firstName} ${friend.lastName}`}
                 className="friend-avatar"
               />
