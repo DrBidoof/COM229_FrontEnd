@@ -9,7 +9,7 @@ const PostsWidget = ({ userId }) => {
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/posts`, {
+      const response = await fetch(`http://localhost:6001/posts`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -30,7 +30,7 @@ const PostsWidget = ({ userId }) => {
 
   const handleLike = async (postId) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/posts/${postId}/like`, {
+      const response = await fetch(`http://localhost:6001/posts/${postId}/like`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,6 +58,26 @@ const PostsWidget = ({ userId }) => {
       );
     } catch (error) {
       console.error("Error liking post:", error);
+    }
+  };
+
+  const handleAddFriend = async (friendId) => {
+    try {
+      const response = await fetch(`http://localhost:6001/friends/${friendId}/add`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add friend");
+      }
+
+      alert("Friend added successfully!");
+    } catch (error) {
+      console.error("Error adding friend:", error);
+      alert("An error occurred while adding the friend.");
     }
   };
 
@@ -89,10 +109,26 @@ const PostsWidget = ({ userId }) => {
             <p>{post.description}</p>
             {post.picturePath && (
               <img
-                src={`${process.env.REACT_APP_API_URL}/assets/${post.picturePath}`}
+                src={`http://localhost:6001${post.picturePath}`}
                 alt="Post"
                 style={{ width: "100%", height: "auto", borderRadius: "5px" }}
               />
+            )}
+            {post.userID !== userId && (
+              <button
+                onClick={() => handleAddFriend(post.userID)}
+                style={{
+                  padding: "5px 10px",
+                  backgroundColor: "#6c757d",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  marginTop: "10px",
+                }}
+              >
+                Add Friend
+              </button>
             )}
             <button
               onClick={() => handleLike(post._id)}

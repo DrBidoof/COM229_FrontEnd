@@ -7,7 +7,11 @@ const MyPostWidget = ({ onPostCreated }) => {
   const [loading, setLoading] = useState(false);
 
   const token = useSelector((state) => state.auth.token);
-  const userId = useSelector((state) => state.auth.user._id);
+  const user = useSelector((state) => state.auth.user);
+
+  console.log("Redux User:", user); // Debugging
+  const userId = user?._id || user?.id; // Use appropriate field
+  
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
@@ -20,31 +24,38 @@ const MyPostWidget = ({ onPostCreated }) => {
     }
 
     const formData = new FormData();
-    formData.append("userID", userId);
+    formData.append("userID", userId); // Adjust field name if required
     formData.append("description", description);
     if (picture) {
       formData.append("picture", picture);
     }
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/posts`, {
+      // Debugging FormData
+      console.log("Posting data:");
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
+      }
+
+      const response = await fetch(`http://localhost:6001/posts`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, // Ensure the backend requires this
         },
         body: formData,
       });
 
-      const responseData = await response.json();
-
-      if (response.ok) {
-        alert("Post created successfully!");
-        setDescription("");
-        setPicture(null);
-        if (onPostCreated) onPostCreated(); // Trigger post list refresh
-      } else {
-        alert(`Failed to create post: ${responseData.message || "Unknown error"}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`Failed to create post: ${errorData.message || "Unknown error"}`);
+        console.error("Error response:", errorData);
+        return;
       }
+
+      alert("Post created successfully!");
+      setDescription("");
+      setPicture(null);
+      if (onPostCreated) onPostCreated();
     } catch (error) {
       console.error("Error creating post:", error);
       alert("An error occurred while creating the post.");
