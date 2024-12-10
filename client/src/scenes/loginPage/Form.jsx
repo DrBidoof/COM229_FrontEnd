@@ -41,7 +41,8 @@ const Form = () => {
 
         console.log("Register request data:", formData);
 
-        const savedUserResponse = await fetch(`${process.env.REACT_APP_API_URL}/auth/register`, {
+        const savedUserResponse = await fetch("https://group-project-com229-backend.onrender.com/auth/register", 
+          {
           method: "POST",
           body: formData,
       });
@@ -81,7 +82,7 @@ const login = async (values, onSubmitProps) => {
     console.log("Login request data:", loginPayload);
 
     const loggedInResponse = await fetch(
-      `${process.env.REACT_APP_API_URL}/auth/login`,
+     "https://group-project-com229-backend.onrender.com/auth/login",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
