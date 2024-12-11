@@ -57,7 +57,7 @@ const UserWidget = ({ userId, picturePath }) => {
       >
         <div className="user-info">
           <img
-            src={picturePath || "/assets/Image.png"}
+            src={picturePath || "/assets/image.png"}
             alt="User profile"
             className="user-image"
           />
