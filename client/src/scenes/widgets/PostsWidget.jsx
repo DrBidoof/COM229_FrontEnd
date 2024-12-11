@@ -117,7 +117,7 @@ const PostsWidget = ({ userId, fetchFriends }) => {
             <p className="post-description">{post.description}</p>
             {post.picturePath && (
               <img
-                src={`http://localhost:6001${post.picturePath}`}
+                src={`${process.env.REACT_APP_API_URL}${post.picturePath}`}
                 alt="Post"
                 className="post-image"
               />
