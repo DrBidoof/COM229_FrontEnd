@@ -2,18 +2,22 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import "./PostsWidget.css";
 
-const PostsWidget = ({ userId, fetchFriends }) => {
+const PostsWidget = ({ userId: propUserId, fetchFriends }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = useSelector((state) => state.auth.token);
+  const loggedInUserId = useSelector((state) => state.auth.user?.id || state.auth.user?._id);
+
+  const isProfilePage = Boolean(propUserId); // If `propUserId` exists, we're on the profile page
+  const userId = isProfilePage ? propUserId : loggedInUserId; // Use `propUserId` if on profile page, otherwise use logged-in user's ID
 
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
-      const endpoint = userId
-        ? `${process.env.REACT_APP_API_URL}/posts/${userId}/posts` // Fetch posts for a specific user
-        : `${process.env.REACT_APP_API_URL}/posts`; // Fetch all posts
-    
+      const endpoint = isProfilePage
+        ? `${process.env.REACT_APP_API_URL}/posts/${userId}/posts` // Fetch posts for the specific user (Profile Page)
+        : `${process.env.REACT_APP_API_URL}/posts`; // Fetch all posts (Home Page)
+
       const response = await fetch(endpoint, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -25,13 +29,13 @@ const PostsWidget = ({ userId, fetchFriends }) => {
       }
 
       const data = await response.json();
-      setPosts(userId ? data.userPosts || [] : data.allPosts || []);
+      setPosts(isProfilePage ? data.userPosts || [] : data.allPosts || []);
     } catch (error) {
       console.error("Error fetching posts:", error);
     } finally {
       setLoading(false);
     }
-  }, [token, userId]);
+  }, [token, userId, isProfilePage]);
 
   const handleLike = async (postId) => {
     try {
@@ -41,7 +45,7 @@ const PostsWidget = ({ userId, fetchFriends }) => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId }),
+        body: JSON.stringify({ userId: loggedInUserId }), // Always use logged-in user's ID for likes
       });
 
       if (!response.ok) {
@@ -55,7 +59,7 @@ const PostsWidget = ({ userId, fetchFriends }) => {
                 ...post,
                 likes: {
                   ...post.likes,
-                  [userId]: !post.likes[userId],
+                  [loggedInUserId]: !post.likes[loggedInUserId],
                 },
               }
             : post
@@ -67,9 +71,12 @@ const PostsWidget = ({ userId, fetchFriends }) => {
   };
 
   const handleAddFriend = async (friendId) => {
+    console.log("Resolved userId for Add Friend:", loggedInUserId); // Debugging log
+    console.log("FriendId:", friendId); // Debugging log
+
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/users/${userId}/${friendId}`,
+        `${process.env.REACT_APP_API_URL}/users/${loggedInUserId}/${friendId}`,
         {
           method: "PATCH",
           headers: {
@@ -79,17 +86,17 @@ const PostsWidget = ({ userId, fetchFriends }) => {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to add friend");
+        const errorDetails = await response.text();
+        throw new Error(`Failed to add friend: ${response.status} - ${errorDetails}`);
+      }
+
+      if (fetchFriends) {
+        await fetchFriends();
       }
 
       alert("Friend added successfully!");
-      
-      // Update friends list in FriendListWidget
-      if (fetchFriends) {
-        fetchFriends(); // Trigger fetchFriends to update FriendListWidget
-      }
     } catch (error) {
-      console.error("Error adding friend:", error);
+      console.error("Error adding friend:", error.message);
       alert("Failed to add friend. Please try again.");
     }
   };
@@ -108,17 +115,17 @@ const PostsWidget = ({ userId, fetchFriends }) => {
         posts.map((post) => (
           <div className="post-card" key={post._id}>
             <div className="post-header">
-            <img
+              <img
                 src={
                   post.userPicturePath
                     ? `${process.env.REACT_APP_API_URL}${post.userPicturePath}`
-                    : "/assets/image.png" // Fallback image if userPicturePath is not available
+                    : "/assets/image.png"
                 }
                 alt="Profile"
                 className="profile-picture"
               />
               <div>
-                <h3 className="post-author">{post.firstName} {post.lastName}</h3>
+                <h3 className="post-author">{`${post.firstName} ${post.lastName}`}</h3>
                 <p className="post-location">Location: {post.location || "Unknown"}</p>
               </div>
             </div>
@@ -131,16 +138,16 @@ const PostsWidget = ({ userId, fetchFriends }) => {
               />
             )}
             <div className="post-actions">
-              {post.userID !== userId && (
+              {post.userID !== loggedInUserId && (
                 <button className="add-friend-btn" onClick={() => handleAddFriend(post.userID)}>
                   Add Friend
                 </button>
               )}
               <button
-                className={`like-btn ${post.likes[userId] ? "liked" : ""}`}
+                className={`like-btn ${post.likes[loggedInUserId] ? "liked" : ""}`}
                 onClick={() => handleLike(post._id)}
               >
-                {post.likes[userId] ? "Unlike" : "Like"} ({Object.keys(post.likes || {}).length})
+                {post.likes[loggedInUserId] ? "Unlike" : "Like"} ({Object.keys(post.likes || {}).length})
               </button>
             </div>
           </div>
