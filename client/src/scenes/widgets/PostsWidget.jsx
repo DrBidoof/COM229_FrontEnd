@@ -21,7 +21,10 @@ const PostsWidget = ({ userId, fetchFriends }) => {
       }
 
       const data = await response.json();
-      setPosts(data.allPosts || []);
+      console.log(data.allPosts[-1])
+      console.log(data)
+      setPosts(data.allPosts);
+      console.log(data.allPosts)
     } catch (error) {
       console.error("Error fetching posts:", error);
     } finally {
@@ -117,7 +120,7 @@ const PostsWidget = ({ userId, fetchFriends }) => {
             <p className="post-description">{post.description}</p>
             {post.picturePath && (
               <img
-                src={`http://localhost:6001${post.picturePath}`}
+                src={`https://group-project-com229-backend.onrender.com${post.picturePath}`}
                 alt="Post"
                 className="post-image"
               />
