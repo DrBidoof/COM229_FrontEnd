@@ -10,7 +10,11 @@ const PostsWidget = ({ userId, fetchFriends }) => {
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/posts`, {
+      const endpoint = userId
+        ? `${process.env.REACT_APP_API_URL}/posts/${userId}/posts` // Fetch posts for a specific user
+        : `${process.env.REACT_APP_API_URL}/posts`; // Fetch all posts
+    
+      const response = await fetch(endpoint, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -21,13 +25,13 @@ const PostsWidget = ({ userId, fetchFriends }) => {
       }
 
       const data = await response.json();
-      setPosts(data.allPosts || []);
+      setPosts(userId ? data.userPosts || [] : data.allPosts || []);
     } catch (error) {
       console.error("Error fetching posts:", error);
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, [token, userId]);
 
   const handleLike = async (postId) => {
     try {

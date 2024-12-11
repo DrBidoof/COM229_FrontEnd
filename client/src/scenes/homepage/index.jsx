@@ -36,7 +36,7 @@ const HomePage = () => {
         </div>
         <div className="main-content">
           <MyPostWidget picturePath={picturePath} />
-          <PostsWidget userId={_id} />
+          <PostsWidget/>
         </div>
         <div className="widget">
           <FriendListWidget userId={_id} />
