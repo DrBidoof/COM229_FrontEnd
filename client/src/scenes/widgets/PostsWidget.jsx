@@ -10,7 +10,7 @@ const PostsWidget = ({ userId, fetchFriends }) => {
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:6001/posts`, {
+      const response = await fetch(`https://group-project-com229-backend.onrender.com/posts`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -31,7 +31,7 @@ const PostsWidget = ({ userId, fetchFriends }) => {
 
   const handleLike = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:6001/posts/${postId}/like`, {
+      const response = await fetch(`https://group-project-com229-backend.onrender.com/posts/${postId}/like`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -65,7 +65,7 @@ const PostsWidget = ({ userId, fetchFriends }) => {
   const handleAddFriend = async (friendId) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/users/${userId}/${friendId}`,
+        `$https://group-project-com229-backend.onrender.com/users/${userId}/${friendId}`,
         {
           method: "PATCH",
           headers: {

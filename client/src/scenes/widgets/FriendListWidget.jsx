@@ -12,7 +12,7 @@ const FriendListWidget = ({ userId }) => {
   const fetchFriends = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${userId}/friends`, {
+      const response = await fetch(`$https://group-project-com229-backend.onrender.com/users/${userId}/friends`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -36,7 +36,7 @@ const FriendListWidget = ({ userId }) => {
   const handleRemoveFriend = async (friendId) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/users/${userId}/${friendId}`,
+        `$https://group-project-com229-backend.onrender.com/users/${userId}/${friendId}`,
         {
           method: "PATCH",
           headers: {

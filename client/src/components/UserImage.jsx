@@ -19,7 +19,7 @@ const UserImage = ({ image, size = "60px" }) => {
       <img
         style={imageStyle}
         alt="user"
-        src={`${process.env.REACT_APP_API_URL}/assets/${image}`} 
+        src={`$https://group-project-com229-backend.onrender.com/assets/${image}`} 
       />
     </div>
   );

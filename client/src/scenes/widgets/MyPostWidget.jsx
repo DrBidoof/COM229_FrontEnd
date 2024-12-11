@@ -37,7 +37,7 @@ const MyPostWidget = ({ onPostCreated }) => {
         console.log(pair[0] + ": " + pair[1]);
       }
 
-      const response = await fetch(`http://localhost:6001/posts`, {
+      const response = await fetch(`https://group-project-com229-backend.onrender.com/posts`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`, // Ensure the backend requires this

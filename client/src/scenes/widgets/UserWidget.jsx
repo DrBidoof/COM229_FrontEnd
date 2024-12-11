@@ -12,7 +12,7 @@ const UserWidget = ({ userId, picturePath }) => {
   const getUser = useCallback(async () => {
     try {
       console.log(`Fetching user data for userId: ${userId}`);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${userId}`, {
+      const response = await fetch(`$https://group-project-com229-backend.onrender.com/users/${userId}`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
