@@ -104,8 +104,12 @@ const PostsWidget = ({ userId, fetchFriends }) => {
         posts.map((post) => (
           <div className="post-card" key={post._id}>
             <div className="post-header">
-              <img
-                src={ "/assets/Image.png" }// Replace with user profile picture if available
+            <img
+                src={
+                  post.userPicturePath
+                    ? `${process.env.REACT_APP_API_URL}${post.userPicturePath}`
+                    : "/assets/image.png" // Fallback image if userPicturePath is not available
+                }
                 alt="Profile"
                 className="profile-picture"
               />

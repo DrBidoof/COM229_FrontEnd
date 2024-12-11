@@ -74,11 +74,16 @@ const FriendListWidget = ({ userId }) => {
           {friends.map((friend) => (
             <div className="friend-card" key={friend._id}>
             <div className="friend-info">
-              <img
-                src={friend.picturePath || "/assets/Image.png"}
-                alt={`${friend.firstName} ${friend.lastName}`}
-                className="friend-avatar"
-              />
+            <img
+              src={`${process.env.REACT_APP_API_URL}${friend.picturePath}` || "/assets/image.png"}
+              alt={`${friend.firstName} ${friend.lastName}`}
+              className="friend-avatar"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "/assets/image.png";
+              }}
+            />
+
               <div className="friend-details">
                 <p className="friend-name">{`${friend.firstName} ${friend.lastName}`}</p>
                 <p className="friend-subtitle">{friend.occupation || "Unknown"}</p>

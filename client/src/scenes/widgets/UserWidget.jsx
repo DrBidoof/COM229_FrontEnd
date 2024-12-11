@@ -4,11 +4,10 @@ import { useNavigate } from "react-router-dom";
 import "./userWidget.css";
 
 const UserWidget = ({ userId, picturePath }) => {
-  const [user, setUser] = useState(null); // State to store user data
-  const token = useSelector((state) => state.auth.token); // Get the token from Redux state
+  const [user, setUser] = useState(null);
+  const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
 
-  // Function to fetch user data
   const getUser = useCallback(async () => {
     try {
       console.log(`Fetching user data for userId: ${userId}`);
@@ -26,13 +25,12 @@ const UserWidget = ({ userId, picturePath }) => {
 
       const data = await response.json();
       console.log("User data received:", data);
-      setUser(data); // Store user data in state
+      setUser(data);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
   }, [userId, token]);
 
-  // Fetch user data when component mounts
   useEffect(() => {
     if (!userId) {
       console.error("UserWidget received undefined userId. Skipping fetch.");
@@ -42,25 +40,23 @@ const UserWidget = ({ userId, picturePath }) => {
   }, [getUser, userId]);
 
   if (!user) {
-    return <p>Loading...</p>; // Render a loading message until data is fetched
+    return <p>Loading...</p>;
   }
 
-  // Destructure user properties
   const { firstName, lastName, location, occupation, friends } = user;
+
+  const imgSrc = picturePath
+    ? `${process.env.REACT_APP_API_URL}${picturePath}`
+    : "/assets/image.png";
+
+  console.log("Picture Path in UserWidget:", picturePath);
+  console.log("Resolved Image src:", imgSrc);
 
   return (
     <div className="widget">
-      {/* User Header */}
-      <div
-        className="user-header"
-        onClick={() => navigate(`/profile/${userId}`)} // Navigate to profile page on click
-      >
+      <div className="user-header" onClick={() => navigate(`/profile/${userId}`)}>
         <div className="user-info">
-          <img
-            src={picturePath || "/assets/image.png"}
-            alt="User profile"
-            className="user-image"
-          />
+          <img src={imgSrc} alt="User profile" className="user-image" />
           <div>
             <h4 className="user-name">
               {firstName} {lastName}
@@ -70,10 +66,7 @@ const UserWidget = ({ userId, picturePath }) => {
         </div>
         <button className="manage-account">Manage</button>
       </div>
-
       <hr />
-
-      {/* User Details */}
       <div className="user-details">
         <div className="user-location">
           <span className="icon">📍</span>
