@@ -1,9 +1,9 @@
 /* Widget container */
 .widget {
   padding: 20px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--widget-border-color);
   border-radius: 10px;
-  background-color: #fff;
+  background-color: var(--widget-background-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 400px;
   margin: 0 auto;
@@ -33,27 +33,28 @@
   margin: 0;
   font-size: 18px;
   font-weight: bold;
-  color: #333;
+  color: var(--text-color);
 }
 
 .user-friends {
   margin: 0;
   font-size: 14px;
-  color: #888;
+  color: var(--secondary-text-color);
 }
 
 .manage-account {
-  background-color: #007bff;
-  color: #fff;
+  background-color: var(--primary-button-color);
+  color: var(--button-text-color);
   border: none;
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 12px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .manage-account:hover {
-  background-color: #0056b3;
+  background-color: var(--hover-primary-button-color);
 }
 
 /* User details */
@@ -71,5 +72,39 @@
 .icon {
   margin-right: 10px;
   font-size: 16px;
-  color: #666;
+  color: var(--secondary-text-color);
+  transition: color 0.3s ease;
+}
+
+.icon:hover {
+  color: var(--primary-button-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .widget {
+      max-width: 100%;
+      padding: 15px;
+  }
+
+  .user-header {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .user-image {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+  }
+
+  .user-name {
+      font-size: 16px;
+  }
+
+  .manage-account {
+      width: 100%;
+      text-align: center;
+      padding: 8px;
+  }
 }
