@@ -23,23 +23,12 @@ const Navbar = () => {
         <h1 className="navbar-logo" onClick={() => navigate("/home")}>
           Snapzy
         </h1>
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="search-input"
-          />
-          <button className="search-button">🔍</button>
-        </div>
       </div>
 
       <div className="navbar-right">
       <button onClick={() => dispatch(setMode())} className="theme-toggle">
   {mode === "dark" ? "☀️" : "🌙"}
 </button>
-        <span className="icon">💬</span>
-        <span className="icon">🔔</span>
-        <span className="icon">❓</span>
         <select
           className="navbar-select"
           onChange={(e) => {
