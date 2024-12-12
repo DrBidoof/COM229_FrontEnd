@@ -25,6 +25,13 @@ body.light-mode {
   --navbar-color: #e0e0e0;
   --widget-background-color: #fff;
   --widget-border-color: #e0e0e0;
+  --primary-button-color: #007bff;
+  --secondary-button-color: #6c757d;
+  --button-text-color: #fff;
+  --success-color: #28a745;
+  --hover-primary-button-color: #0056b3;
+  --hover-secondary-button-color: #5a6268;
+  --hover-button-text-color: #fff;
 }
 
 body.dark-mode {
@@ -33,6 +40,13 @@ body.dark-mode {
   --navbar-color: #1f1f1f;
   --widget-background-color: #1f1f1f;
   --widget-border-color: #333;
+  --primary-button-color: #1e90ff;
+  --secondary-button-color: #444;
+  --button-text-color: #fff;
+  --success-color: #2ecc71;
+  --hover-primary-button-color: #4682b4;
+  --hover-secondary-button-color: #555;
+  --hover-button-text-color: #ddd;
 }
 
 /* Apply Theme Variables */
@@ -42,39 +56,117 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Layout Styling */
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin: 1rem;
+}
+
+/* Ensure each section resizes equally */
+.main-container > div {
+  flex: 1;
+}
+
 /* Utility Classes */
 .full-width {
   width: 100%;
 }
+
 .flex-column {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Component Styling */
+.text-center {
+  text-align: center;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Navbar */
 .navbar {
   background-color: var(--navbar-color);
   padding: 1rem 3%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .navbar-logo {
   font-size: 2rem;
+  font-weight: bold;
+  color: var(--text-color);
 }
 
-/* Responsive Styles */
-@media (max-width: 600px) {
+/* Buttons */
+.button {
+  display: inline-block;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button-primary {
+  background-color: var(--primary-button-color);
+  color: var(--button-text-color);
+}
+
+.button-secondary {
+  background-color: var(--secondary-button-color);
+  color: var(--button-text-color);
+}
+
+.button-primary:hover,
+.button-primary:focus {
+  background-color: var(--hover-primary-button-color);
+  color: var(--hover-button-text-color);
+}
+
+.button-secondary:hover,
+.button-secondary:focus {
+  background-color: var(--hover-secondary-button-color);
+  color: var(--hover-button-text-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column; /* Stack the sections vertically */
+    align-items: stretch;
+  }
+
+  .main-container > div {
+    width: 100%; /* Ensure full width for smaller screens */
+  }
+
   .navbar {
     flex-direction: column;
     align-items: flex-start;
+    padding: 1rem;
   }
+
   .homepage {
     flex-direction: column;
     gap: 20px;
   }
+
   .widget {
     max-width: 100%;
+    padding: 1rem;
+  }
+
+  .button {
+    font-size: 12px;
+    padding: 8px 12px;
   }
 }

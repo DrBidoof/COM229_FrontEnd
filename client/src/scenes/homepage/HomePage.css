@@ -1,3 +1,4 @@
+/* Homepage Layout */
 .homepage {
   display: flex;
   justify-content: space-between;
@@ -25,20 +26,57 @@
   background-color: var(--background-color);
 }
 
+/* Widget Content Styling */
+.widget-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.widget-content {
+  font-size: 14px;
+  color: var(--secondary-text-color);
+  line-height: 1.5;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .homepage {
-    flex-direction: column;
+    flex-direction: column; /* Stack widgets vertically */
     margin: 1rem 3%;
   }
 
   .widget,
   .main-content {
     flex: 1;
-    max-width: 100%;
+    max-width: 100%; /* Full width on smaller screens */
   }
 
   .main-content {
-    gap: 1rem;
+    gap: 1rem; /* Reduce gap for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .homepage {
+    margin: 1rem; /* Further reduce margin on very small screens */
+  }
+
+  .widget {
+    padding: 0.75rem;
+    box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.08); /* Subtler shadow for small screens */
+  }
+
+  .widget-title {
+    font-size: 16px; /* Adjust font size */
+  }
+
+  .widget-content {
+    font-size: 12px; /* Adjust content font size for readability */
+  }
+
+  .main-content {
+    gap: 0.5rem;
   }
 }

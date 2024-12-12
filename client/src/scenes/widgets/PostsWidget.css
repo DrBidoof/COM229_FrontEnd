@@ -1,3 +1,4 @@
+/* Posts Container */
 .posts-container {
   max-width: 800px;
   margin: 0 auto;
@@ -52,12 +53,14 @@
   margin: 15px 0;
 }
 
+/* Post Actions */
 .post-actions {
   display: flex;
   justify-content: flex-start;
   gap: 10px;
 }
 
+/* Buttons */
 .add-friend-btn,
 .like-btn {
   padding: 10px 15px;
@@ -65,67 +68,69 @@
   border-radius: 5px;
   font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .add-friend-btn {
   background-color: var(--secondary-button-color);
-  color: white;
+  color: var(--button-text-color);
 }
 
 .like-btn {
   background-color: var(--primary-button-color);
-  color: white;
+  color: var(--button-text-color);
 }
 
 .like-btn.liked {
   background-color: var(--success-color);
 }
 
-/* Hover and Focus States */
+/* Hover Effects */
 .add-friend-btn:hover,
 .add-friend-btn:focus {
   background-color: var(--hover-secondary-button-color);
+  color: var(--hover-button-text-color);
 }
 
 .like-btn:hover,
 .like-btn:focus {
   background-color: var(--hover-primary-button-color);
+  color: var(--hover-button-text-color);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .posts-container {
-      padding: 0 15px;
+    padding: 0 15px;
   }
 
   .post-card {
-      padding: 15px;
-      margin-bottom: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
   }
 
   .profile-picture {
-      width: 40px;
-      height: 40px;
-      margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
   }
 
   .post-author {
-      font-size: 16px;
+    font-size: 16px;
   }
 
   .post-description {
-      font-size: 14px;
+    font-size: 14px;
   }
 
   .post-actions {
-      flex-wrap: wrap;
-      gap: 5px;
+    flex-wrap: wrap;
+    gap: 5px;
   }
 
   .add-friend-btn,
   .like-btn {
-      font-size: 12px;
-      padding: 8px 12px;
+    font-size: 12px;
+    padding: 8px 12px;
   }
 }

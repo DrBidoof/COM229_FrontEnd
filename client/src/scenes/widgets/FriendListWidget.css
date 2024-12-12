@@ -112,26 +112,32 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .friend-widget {
-      padding: 15px;
+    padding: 15px;
   }
 
   .friend-card {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 10px;
+    flex-direction: column; /* Stack content vertically */
+    align-items: flex-start;
+    padding: 10px;
+    gap: 10px; /* Add spacing between elements */
   }
 
   .friend-avatar {
-      width: 40px;
-      height: 40px;
-      margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    margin-right: 0; /* Adjust margin for vertical alignment */
+    margin-bottom: 10px; /* Add space below the avatar */
   }
 
   .friend-name {
-      font-size: 14px;
+    font-size: 14px;
   }
 
   .friend-subtitle {
-      font-size: 12px;
+    font-size: 12px;
+  }
+
+  .friend-remove-btn {
+    align-self: flex-end; /* Align the remove button to the right in vertical layouts */
   }
 }
