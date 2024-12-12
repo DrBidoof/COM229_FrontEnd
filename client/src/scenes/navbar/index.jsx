@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +33,7 @@ const Navbar = () => {
           className="navbar-select"
           onChange={(e) => {
             if (e.target.value === "logout") {
+              dispatch(setMode("light"));
               dispatch(setLogout());
               navigate("/");
             }
