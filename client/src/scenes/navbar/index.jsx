@@ -10,7 +10,7 @@ const Navbar = () => {
   const mode = useSelector((state) => state.auth.mode);
   const user = useSelector((state) => state.auth.user);
   const fullName = user ? `${user.firstName} ${user.lastName}` : "Guest";
-
+  useEffect(() => { document.documentElement.setAttribute("data-theme", mode); }, [mode]);
   return (
     <div className="navbar">
       <div className="navbar-left">

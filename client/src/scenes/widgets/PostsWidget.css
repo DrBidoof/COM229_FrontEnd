@@ -1,15 +1,17 @@
 .posts-container {
     max-width: 800px;
     margin: 0 auto;
+    width: 100%;
   }
   
   .post-card {
-    background-color: #fff;
+   background-color: var(--widget-background-color);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     padding: 20px;
     overflow: hidden;
+   
   }
   
   .post-header {
